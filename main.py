@@ -59,6 +59,7 @@ def CalcPosOnArc(Center, Radius, Angle):
   Y = Center[1] + Radius * sin(Angle)
   return (X, Y)
 
+# Was planning to add music to it
 def PlayKey(index):
   pass
 
