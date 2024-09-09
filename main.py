@@ -28,21 +28,21 @@ Colors = [
 
 # Supporting functions / class
 class Arc:
-  def __init__(self, Color, Velo, LastImpactTime, NextImpactTime):
+  def __init__(self, Color, Velocity, LastImpactTime, NextImpactTime):
     self.Color = Color
-    self.Velo = Velo
+    self.Velocity = Velocity
     self.LastImpactTime = LastImpactTime
     self.NextImpactTime = NextImpactTime
 
-def CalcVelo(index):
+def CalculateVelocity(index):
   NumOfCycles = MaxCycles - index
   DistPerCycle = 2 * pi
   return (NumOfCycles * DistPerCycle) / Duration
 
-def CalcNextImpactTime(CurrentImpactTime, Velo):
-  return CurrentImpactTime + (pi / Velo) * 1000
+def CalculateNextImpactTime(CurrentImpactTime, Velocity):
+  return CurrentImpactTime + (pi / Velocity) * 1000
 
-def CalcDynamicOpacity(CurrentTime, LastImpactTime, BaseOpacity, MaxOpacity, Duration):
+def CalculateDynamicOpacity(CurrentTime, LastImpactTime, BaseOpacity, MaxOpacity, Duration):
   TimeSinceImpact = CurrentTime - LastImpactTime
   Perc = min(TimeSinceImpact / Duration, 1)
   OpacityDelta = MaxOpacity - BaseOpacity
@@ -52,9 +52,9 @@ def DetermineOpacity(CurrentTime, LastImpactTime, BaseOpacity, MaxOpacity, Durat
   if not PulseEnabled:
     return BaseOpacity
       
-  return CalcDynamicOpacity(CurrentTime, LastImpactTime, BaseOpacity, MaxOpacity, Duration)
+  return CalculateDynamicOpacity(CurrentTime, LastImpactTime, BaseOpacity, MaxOpacity, Duration)
 
-def CalcPosOnArc(Center, Radius, Angle):
+def CalculatePosOnArc(Center, Radius, Angle):
   X = Center[0] + Radius * cos(Angle)
   Y = Center[1] + Radius * sin(Angle)
   return (X, Y)
@@ -67,12 +67,12 @@ def Init():
   Arcs = []
   
   for index, Color in enumerate(Colors):
-    Velo = CalcVelo(index)
+    Velocity = CalcVelocity(index)
       
     LastImpactTime = 0
-    NextImpactTime = CalcNextImpactTime(StartTime, Velo)
+    NextImpactTime = CalculateNextImpactTime(StartTime, Velocity)
       
-    arc = Arc(Color, Velo, LastImpactTime, NextImpactTime)
+    arc = Arc(Color, Velocity, LastImpactTime, NextImpactTime)
     Arcs.append(arc)
       
   return Arcs
@@ -86,7 +86,7 @@ def DrawArc(X, Y, Radius, Start, End, action="stroke"):
   turtle.circle(Radius, (End - Start) * 180 / pi)
 
 def DrawPointOnArc(Center, ArcRadius, PointRadius, Angle):
-  Pos = CalcPosOnArc(Center, ArcRadius, Angle)
+  Pos = CalculatePosOnArc(Center, ArcRadius, Angle)
   X, Y = Pos
   
   turtle.penup()
@@ -143,9 +143,9 @@ def Draw():
         PlayKey(index)
         arc.LastImpactTime = arc.NextImpactTime
               
-      arc.NextImpactTime = CalcNextImpactTime(arc.NextImpactTime, arc.Velo)
+      arc.NextImpactTime = CalculateNextImpactTime(arc.NextImpactTime, arc.Velocity)
 
-    Dist = ElapsedTime * arc.Velo
+    Dist = ElapsedTime * arc.Velocity
     Angle = (pi + Dist) % BaseMaxAngle
     DrawPointOnArc(Center, Radius, BaseCircleRadius, Angle)
 
