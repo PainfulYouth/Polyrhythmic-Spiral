@@ -54,7 +54,7 @@ def DetermineOpacity(CurrentTime, LastImpactTime, BaseOpacity, MaxOpacity, Durat
       
   return CalculateDynamicOpacity(CurrentTime, LastImpactTime, BaseOpacity, MaxOpacity, Duration)
 
-def CalculatePosOnArc(Center, Radius, Angle):
+def CalculatePositionOnArc(Center, Radius, Angle):
   X = Center[0] + Radius * cos(Angle)
   Y = Center[1] + Radius * sin(Angle)
   return (X, Y)
@@ -67,7 +67,7 @@ def Init():
   Arcs = []
   
   for index, Color in enumerate(Colors):
-    Velocity = CalcVelocity(index)
+    Velocity = CalculateVelocity(index)
       
     LastImpactTime = 0
     NextImpactTime = CalculateNextImpactTime(StartTime, Velocity)
@@ -86,8 +86,8 @@ def DrawArc(X, Y, Radius, Start, End, action="stroke"):
   turtle.circle(Radius, (End - Start) * 180 / pi)
 
 def DrawPointOnArc(Center, ArcRadius, PointRadius, Angle):
-  Pos = CalculatePosOnArc(Center, ArcRadius, Angle)
-  X, Y = Pos
+  Position = CalculatePositionOnArc(Center, ArcRadius, Angle)
+  X, Y = Position
   
   turtle.penup()
   turtle.goto(X, Y - PointRadius)
